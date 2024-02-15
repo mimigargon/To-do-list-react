@@ -5,9 +5,8 @@ import Tarea from "./Tarea";
 function App() {
   const [listaTareas, setlistaTareas] = useState([]);
   const [tarea, setTarea] = useState("");
-  const [newIndex, setNewIndex] = useState(0);
   const [open, setOpen] = useState(false);
-  const [type, setType] = useState("trabajo");
+  const [type, setType] = useState("");
 
   const handleOpen = () => {
     setOpen(!open);
@@ -20,9 +19,8 @@ function App() {
   }
 
   const nuevaTarea = () => {
-    let obj = { "id": newIndex, "name": tarea, "type": type }
+    let obj = { "id": listaTareas.length, "name": tarea, "type": type }
     setlistaTareas([...listaTareas, obj]);
-    setNewIndex(newIndex + 1)
     setTarea("");
 
   }
@@ -30,7 +28,6 @@ function App() {
 
   const eliminaTarea = (id) => {
     setlistaTareas(listaTareas.filter(list => list.id != id));
-    console.log(listaTareas)
   }
 
   const selectType = (element) => {
@@ -55,6 +52,21 @@ function App() {
     }
 
     return type;
+  }
+
+  const changeColor = () => {
+
+    switch (type) {
+      case "trabajo":
+        return "blue";
+      case "personal":
+        return "green";
+      case "urgente":
+        return "red";
+      case "familia":
+        return "orange";
+      default: return "purple";
+    }
   }
 
 
@@ -85,6 +97,7 @@ function App() {
                 </ul>
               ) : null}
             </div>
+            <div className={"bg-" + changeColor() + "-400 rounded-lg p-2 text-white"}>{type}</div>
             <button onClick={nuevaTarea} className="bg-purple-500 rounded-lg p-2 text-white">Enviar</button>
           </div>
 
