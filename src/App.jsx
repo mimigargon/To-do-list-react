@@ -1,5 +1,5 @@
 /* eslint-disable react/no-unknown-property */
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Tarea from "./Tarea";
 
 function App() {
@@ -7,6 +7,14 @@ function App() {
   const [tarea, setTarea] = useState("");
   const [open, setOpen] = useState(false);
   const [type, setType] = useState("");
+
+  useEffect(() => {
+    const storedTasks = localStorage.getItem("tasks");
+    if (storedTasks) {
+      setlistaTareas(JSON.parse(storedTasks))
+    }
+  }, []);
+
 
   const handleOpen = () => {
     setOpen(!open);
@@ -22,12 +30,19 @@ function App() {
     let obj = { "id": listaTareas.length, "name": tarea, "type": type }
     setlistaTareas([...listaTareas, obj]);
     setTarea("");
+    localStorage.setItem("tasks", JSON.stringify([...listaTareas, obj]));
 
   }
 
 
   const eliminaTarea = (id) => {
-    setlistaTareas(listaTareas.filter(list => list.id != id));
+    const storedTasks = localStorage.getItem("tasks");
+    if (storedTasks) {
+      const arrayTasks = JSON.parse(storedTasks)
+      const updatedTasks = arrayTasks.filter((task) => task.id !== id);
+      localStorage.setItem("tasks", JSON.stringify(updatedTasks))
+      setlistaTareas(updatedTasks);
+    }
   }
 
   const selectType = (element) => {
